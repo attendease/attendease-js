@@ -1,0 +1,13 @@
+{
+  "name": "attendease",
+  "main": "index.js",
+  "version": "0.1.0",
+  "homepage": "https://github.com/attendease/attendease",
+  "description": "Official JavaScript/Node SDK for Attendease.",
+  "keywords": [
+    "attendease",
+    "event",
+    "client",
+    "sdk"
+  ]
+}

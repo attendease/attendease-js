@@ -1,0 +1,15 @@
+{
+  "name": "attendease",
+  "repo": "attendease/attendease-js",
+  "description": "Official JavaScript/Node SDK for Attendease.",
+  "version": "0.1.0",
+  "keywords": [
+    "attendease",
+    "event",
+    "client",
+    "sdk"
+  ],
+  "scripts": [
+    "index.js"
+  ]
+}
