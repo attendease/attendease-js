@@ -28,13 +28,19 @@ attendease = Attendease('event-subdomain')
 
 ```javascript
 // authenticate as an attendee
-attendease.authenticate({
+attendease.login({
   email: '[email]',
   password: '[password]'
 })
+
+// user details object
+attendease.user()
+
+// logout
+attendease.logout()
 ```
 
-### Read API
+### Read API (WIP)
 
 ```javascript
 // fetch event details
@@ -59,7 +65,7 @@ attendease.webContent()
 attendease.mobileContent()
 ```
 
-### Write API
+### Write API (WIP)
 
 ```javascript
 // like an item
