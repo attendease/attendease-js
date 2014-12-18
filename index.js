@@ -42,7 +42,7 @@
 
   // Logout. Returns a promise.
   Client.prototype.logout = function() {
-    (def = $.Defered()).resolve()
+    (def = $.Deferred()).resolve()
     localStorage.clear()
     return def.promise()
   }
