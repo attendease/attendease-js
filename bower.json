@@ -1,7 +1,7 @@
 {
   "name": "attendease",
   "main": "index.js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/attendease/attendease",
   "description": "Official JavaScript/Node SDK for Attendease.",
   "keywords": [
@@ -9,5 +9,8 @@
     "event",
     "client",
     "sdk"
-  ]
+  ],
+  "dependencies": {
+    "jquery": "~2.1.0" 
+  }
 }
