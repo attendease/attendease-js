@@ -40,13 +40,13 @@ attendease.user()
 attendease.logout()
 ```
 
-### Read API (WIP)
+### Read API
 
 ```javascript
-// fetch event details
+// fetch event details (WIP)
 attendease.eventDetails()
 
-// fetch user details
+// fetch user details (WIP)
 attendease.userDetails()
 
 // fetch presenters
@@ -55,38 +55,41 @@ attendease.presenters()
 // fetch sessions
 attendease.sessions()
 
-// fetch sponsors
+// fetch sessions mapped out as instances
+attendease.instances()
+
+// fetch sponsors (WIP)
 attendease.sponsors()
 
-// fetch website content items
+// fetch website content items (WIP)
 attendease.webContent()
 
-// fetch mobile content items
+// fetch mobile content items (WIP)
 attendease.mobileContent()
 ```
 
-### Write API (WIP)
+### Write API
 
 ```javascript
-// like an item
+// like an item (WIP)
 attendease.like({
   type: 'presenter',
   id: '[presenterId]'
 })
 
-// unlike an item
+// unlike an item (WIP)
 attendease.unlike('[itemId]')
 
-// rate an item
+// rate an item (WIP)
 attendease.rate({
   type: 'session',
   id: '[sessionId]',
   rating: 4
 })
 
-// schedule an instance
+// schedule an instance (WIP)
 attendease.schedule('[instanceId]')
 
-// unschedule an instance
+// unschedule an instance (WIP)
 attendease.unschedule('[instanceId]')
 ```
