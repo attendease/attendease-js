@@ -1,4 +1,6 @@
 (function() {
+  'use strict';
+
   // Public Attendease interface.
   function Attendease(subdomain, options) {
     return new Client(subdomain, options)
@@ -21,12 +23,9 @@
 
     return $.ajax({
       type: "POST",
-      url: this.apiRoot() + 'api/verify_credentials.json',
+      url: this.apiRoot() + 'api/authenticate.json',
       async: true,
-      data: {
-        email: credentials.email,
-        password: credentials.password
-      },
+      data: credentials,
       dataType: 'jsonp',
       timeout: 45000,
       success: function(response) {
@@ -42,19 +41,87 @@
 
   // Logout. Returns a promise.
   Client.prototype.logout = function() {
-    (def = $.Deferred()).resolve()
+    var def = $.Deferred()
     localStorage.clear()
+    def.resolve()
     return def.promise()
   }
 
   // Returns the current user object.
   Client.prototype.user = function() {
-    return (data = localStorage.user) ? JSON.parse(data) : false
+    var data = localStorage.user
+    return data ? JSON.parse(data) : false
   }
 
   // Returns the credentials for the current user.
   Client.prototype.credentials = function() {
     return JSON.parse(localStorage.credentials)
+  }
+
+  // Fetches and returns all sessions for the event.
+  Client.prototype.sessions = function(sync) {
+    var def = $.Deferred()
+
+    $.ajax({
+      type: "GET",
+      url: this.apiRoot() + 'api/sessions.json',
+      data: this.credentials(),
+      dataType: 'jsonp',
+      success: function(response) {
+        localStorage.sessions = JSON.stringify(response)
+        def.resolve(response)
+      },
+      error: function() {
+        def.reject()
+      }
+    })
+
+    return def.promise()
+  }
+
+  // Fetches and returns all sessions (mapped as instances) for the event.
+  Client.prototype.instances = function(sync) {
+    var def = $.Deferred()
+    var instances = []
+
+    this.sessions().then(function(sessions) {
+      for(var i = 0; i < sessions.length; i++) {
+        var session = sessions[i]
+
+        for(var ii = 0; ii < (session.instances || []).length; ii++) {
+          var instance = session.instances[ii]
+          instance.session = session
+          instances.push(instance)
+        }
+      }
+
+      def.resolve(instances)
+    }, function() {
+      def.reject()
+    })
+
+    return def.promise()
+  }
+
+  // Fetches and returns all presenters for the event.
+  Client.prototype.presenters = function(sync) {
+    var def = $.Deferred()
+
+    $.ajax({
+      type: "GET",
+      url: this.apiRoot() + 'api/presenters.json',
+      data: this.credentials(),
+      dataType: 'jsonp',
+      success: function(response) {
+        localStorage.presenters = JSON.stringify(response)
+        def.resolve(response)
+      },
+      error: function() {
+        def.reject()
+      }
+    })
+
+    return def.promise()
   }
 
   // Export module for Node and the browser.
