@@ -17,6 +17,28 @@
     return this.endpoint || ('https://' + this.subdomain + '.attendease.com/')
   }
 
+  // Syncs the resource with Attendease event API. Returns a promise.
+  Client.prototype.sync = function(resource) {
+    var def = $.Deferred()
+
+    $.ajax({
+      type: "GET",
+      url: this.apiRoot() + 'api/' + resource + '.json',
+      data: this.credentials(),
+      dataType: 'jsonp',
+      success: function(response) {
+        localStorage[resource] = JSON.stringify(response)
+        def.resolve(response)
+      },
+      error: function() {
+        def.reject()
+      }
+    })
+
+    return def.promise()
+  }
+
+
   // Authenticate as a registered attendee. Returns a promise.
   Client.prototype.login = function(credentials) {
     this.logout()
@@ -60,44 +82,12 @@
 
   // Fetches and returns the event details.
   Client.prototype.event = function(sync) {
-    var def = $.Deferred()
-
-    $.ajax({
-      type: "GET",
-      url: this.apiRoot() + 'api/event.json',
-      data: this.credentials(),
-      dataType: 'jsonp',
-      success: function(response) {
-        localStorage.event = JSON.stringify(response)
-        def.resolve(response)
-      },
-      error: function() {
-        def.reject()
-      }
-    })
-
-    return def.promise()
+    return this.sync('event')
   }
 
   // Fetches and returns all sessions for the event.
   Client.prototype.sessions = function(sync) {
-    var def = $.Deferred()
-
-    $.ajax({
-      type: "GET",
-      url: this.apiRoot() + 'api/sessions.json',
-      data: this.credentials(),
-      dataType: 'jsonp',
-      success: function(response) {
-        localStorage.sessions = JSON.stringify(response)
-        def.resolve(response)
-      },
-      error: function() {
-        def.reject()
-      }
-    })
-
-    return def.promise()
+    return this.sync('sessions')
   }
 
   // Fetches and returns all sessions (mapped as instances) for the event.
@@ -126,65 +116,17 @@
 
   // Fetches and returns all presenters for the event.
   Client.prototype.presenters = function(sync) {
-    var def = $.Deferred()
-
-    $.ajax({
-      type: "GET",
-      url: this.apiRoot() + 'api/presenters.json',
-      data: this.credentials(),
-      dataType: 'jsonp',
-      success: function(response) {
-        localStorage.presenters = JSON.stringify(response)
-        def.resolve(response)
-      },
-      error: function() {
-        def.reject()
-      }
-    })
-
-    return def.promise()
+    return this.sync('presenters')
   }
 
   // Fetches and returns all rooms for the event.
   Client.prototype.rooms = function(sync) {
-    var def = $.Deferred()
-
-    $.ajax({
-      type: "GET",
-      url: this.apiRoot() + 'api/rooms.json',
-      data: this.credentials(),
-      dataType: 'jsonp',
-      success: function(response) {
-        localStorage.rooms = JSON.stringify(response)
-        def.resolve(response)
-      },
-      error: function() {
-        def.reject()
-      }
-    })
-
-    return def.promise()
+    return this.sync('rooms')
   }
 
   // Fetches and returns all venues for the event.
   Client.prototype.venues = function(sync) {
-    var def = $.Deferred()
-
-    $.ajax({
-      type: "GET",
-      url: this.apiRoot() + 'api/venues.json',
-      data: this.credentials(),
-      dataType: 'jsonp',
-      success: function(response) {
-        localStorage.venues = JSON.stringify(response)
-        def.resolve(response)
-      },
-      error: function() {
-        def.reject()
-      }
-    })
-
-    return def.promise()
+    return this.sync('venues')
   }
 
   // Export module for Node and the browser.
