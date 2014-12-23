@@ -58,6 +58,27 @@
     return JSON.parse(localStorage.credentials)
   }
 
+  // Fetches and returns the event details.
+  Client.prototype.event = function(sync) {
+    var def = $.Deferred()
+
+    $.ajax({
+      type: "GET",
+      url: this.apiRoot() + 'api/event.json',
+      data: this.credentials(),
+      dataType: 'jsonp',
+      success: function(response) {
+        localStorage.event = JSON.stringify(response)
+        def.resolve(response)
+      },
+      error: function() {
+        def.reject()
+      }
+    })
+
+    return def.promise()
+  }
+
   // Fetches and returns all sessions for the event.
   Client.prototype.sessions = function(sync) {
     var def = $.Deferred()
