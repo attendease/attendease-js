@@ -43,8 +43,8 @@ attendease.logout()
 ### Read API
 
 ```javascript
-// fetch event details (WIP)
-attendease.eventDetails()
+// fetch event details
+attendease.event()
 
 // fetch user details (WIP)
 attendease.userDetails()
@@ -57,6 +57,12 @@ attendease.sessions()
 
 // fetch sessions mapped out as instances
 attendease.instances()
+
+// fetch rooms
+attendease.rooms()
+
+// fetch venues
+attendease.venues()
 
 // fetch sponsors (WIP)
 attendease.sponsors()
