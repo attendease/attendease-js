@@ -124,6 +124,48 @@
     return def.promise()
   }
 
+  // Fetches and returns all rooms for the event.
+  Client.prototype.rooms = function(sync) {
+    var def = $.Deferred()
+
+    $.ajax({
+      type: "GET",
+      url: this.apiRoot() + 'api/rooms.json',
+      data: this.credentials(),
+      dataType: 'jsonp',
+      success: function(response) {
+        localStorage.rooms = JSON.stringify(response)
+        def.resolve(response)
+      },
+      error: function() {
+        def.reject()
+      }
+    })
+
+    return def.promise()
+  }
+
+  // Fetches and returns all venues for the event.
+  Client.prototype.venues = function(sync) {
+    var def = $.Deferred()
+
+    $.ajax({
+      type: "GET",
+      url: this.apiRoot() + 'api/venues.json',
+      data: this.credentials(),
+      dataType: 'jsonp',
+      success: function(response) {
+        localStorage.venues = JSON.stringify(response)
+        def.resolve(response)
+      },
+      error: function() {
+        def.reject()
+      }
+    })
+
+    return def.promise()
+  }
+
   // Export module for Node and the browser.
   if(typeof module !== 'undefined' && module.exports) {
     module.exports = Attendease
