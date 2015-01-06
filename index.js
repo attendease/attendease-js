@@ -130,6 +130,30 @@
     return this.sync('venues')
   }
 
+  // Schedules the current user for the session instance.
+  Client.prototype.schedule = function(instanceId) {
+    return $.ajax({
+      type: "POST",
+      url: this.apiRoot() + 'api/schedule/' + instanceId + '.json',
+      async: true,
+      data: this.credentials(),
+      dataType: 'jsonp',
+      timeout: 45000
+    })
+  }
+
+  // Unschedules the current user from the session instance.
+  Client.prototype.unschedule = function(instanceId) {
+    return $.ajax({
+      type: "POST",
+      url: this.apiRoot() + 'api/unschedule/' + instanceId + '.json',
+      async: true,
+      data: this.credentials(),
+      dataType: 'jsonp',
+      timeout: 45000
+    })
+  }
+
   // Export module for Node and the browser.
   if(typeof module !== 'undefined' && module.exports) {
     module.exports = Attendease
