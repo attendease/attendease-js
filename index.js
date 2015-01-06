@@ -51,7 +51,7 @@
       dataType: 'jsonp',
       timeout: 45000,
       success: function(response) {
-        localStorage.user = JSON.stringify(response)
+        localStorage.user_details = JSON.stringify(response)
 
         localStorage.credentials = JSON.stringify({
           email: credentials.email,
@@ -70,9 +70,15 @@
   }
 
   // Returns the current user object.
-  Client.prototype.user = function() {
-    var data = localStorage.user
-    return data ? JSON.parse(data) : false
+  Client.prototype.user = function(sync) {
+    var data
+
+    if (sync) {
+      return this.sync('user_details')
+    } else {
+      data = localStorage.user_details
+      return data ? JSON.parse(data) : false
+    }
   }
 
   // Returns the credentials for the current user.
@@ -97,10 +103,10 @@
     var i, ii, session, instance
 
     this.sessions().then(function(sessions) {
-      for(i = 0; i < sessions.length; i++) {
+      for (i = 0; i < sessions.length; i++) {
         session = sessions[i]
 
-        for(ii = 0; ii < (session.instances || []).length; ii++) {
+        for (ii = 0; ii < (session.instances || []).length; ii++) {
           instance = session.instances[ii]
           instance.session = session
           instances.push(instance)
