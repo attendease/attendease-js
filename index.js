@@ -94,13 +94,14 @@
   Client.prototype.instances = function(sync) {
     var def = $.Deferred()
     var instances = []
+    var i, ii, session, instance
 
     this.sessions().then(function(sessions) {
-      for(var i = 0; i < sessions.length; i++) {
-        var session = sessions[i]
+      for(i = 0; i < sessions.length; i++) {
+        session = sessions[i]
 
-        for(var ii = 0; ii < (session.instances || []).length; ii++) {
-          var instance = session.instances[ii]
+        for(ii = 0; ii < (session.instances || []).length; ii++) {
+          instance = session.instances[ii]
           instance.session = session
           instances.push(instance)
         }
