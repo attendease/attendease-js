@@ -187,6 +187,24 @@
     })
   }
 
+  // Likes the item for the current user.
+  Client.prototype.rate = function(id, type, rating) {
+    var data = this.credentials()
+
+    data.like_id = id
+    data.like_type = type
+    data.rating = rating
+
+    return $.ajax({
+      type: "POST",
+      url: this.apiRoot() + 'api/rate',
+      async: true,
+      data: data,
+      dataType: 'jsonp',
+      timeout: 45000
+    })
+  }
+
   // Export module for Node and the browser.
   if(typeof module !== 'undefined' && module.exports) {
     module.exports = Attendease
