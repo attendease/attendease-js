@@ -74,14 +74,14 @@ attendease.mobileContent()
 ### Write API
 
 ```javascript
-// like an item (WIP)
+// like an item
 attendease.like({
   type: 'presenter',
   id: '[presenterId]'
 })
 
-// unlike an item (WIP)
-attendease.unlike('[itemId]')
+// unlike an item
+attendease.unlike('[likeId]')
 
 // rate an item (WIP)
 attendease.rate({
