@@ -33,7 +33,7 @@ attendease.login({
   password: '[password]'
 })
 
-// user details object
+// get user details
 attendease.user()
 
 // logout
@@ -45,9 +45,6 @@ attendease.logout()
 ```javascript
 // fetch event details
 attendease.event()
-
-// fetch user details (WIP)
-attendease.userDetails()
 
 // fetch presenters
 attendease.presenters()
