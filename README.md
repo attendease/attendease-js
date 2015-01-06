@@ -93,9 +93,9 @@ attendease.rate({
   rating: 4
 })
 
-// schedule an instance (WIP)
+// schedule an instance
 attendease.schedule('[instanceId]')
 
-// unschedule an instance (WIP)
+// unschedule an instance
 attendease.unschedule('[instanceId]')
 ```
