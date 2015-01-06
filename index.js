@@ -160,6 +160,33 @@
     })
   }
 
+  // Likes the item for the current user.
+  Client.prototype.like = function(id, type) {
+    var data = this.credentials()
+    data.like_type = type
+
+    return $.ajax({
+      type: "POST",
+      url: this.apiRoot() + 'api/likes/' + id,
+      async: true,
+      data: data,
+      dataType: 'jsonp',
+      timeout: 45000
+    })
+  }
+
+  // Unlikes the item for the current user.
+  Client.prototype.unlike = function(id) {
+    return $.ajax({
+      type: "POST",
+      url: this.apiRoot() + 'api/likes_remove/' + id,
+      async: true,
+      data: this.credentials(),
+      dataType: 'jsonp',
+      timeout: 45000
+    })
+  }
+
   // Export module for Node and the browser.
   if(typeof module !== 'undefined' && module.exports) {
     module.exports = Attendease
