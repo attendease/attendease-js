@@ -75,20 +75,13 @@ attendease.mobileContent()
 
 ```javascript
 // like an item
-attendease.like({
-  type: 'presenter',
-  id: '[presenterId]'
-})
+attendease.like('[presenterId]', 'presenter')
 
 // unlike an item
 attendease.unlike('[likeId]')
 
-// rate an item (WIP)
-attendease.rate({
-  type: 'session',
-  id: '[sessionId]',
-  rating: 4
-})
+// rate an item
+attendease.rate('[sessionId]', 'session', 4)
 
 // schedule an instance
 attendease.schedule('[instanceId]')
