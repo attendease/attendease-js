@@ -60,15 +60,6 @@ attendease.rooms()
 
 // fetch venues
 attendease.venues()
-
-// fetch sponsors (WIP)
-attendease.sponsors()
-
-// fetch website content items (WIP)
-attendease.webContent()
-
-// fetch mobile content items (WIP)
-attendease.mobileContent()
 ```
 
 ### Write API
