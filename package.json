@@ -1,7 +1,7 @@
 {
   "name": "attendease",
   "description": "Official JavaScript/Node SDK for Attendease.",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "url": "http://github.com/attendease/attendease-js",
   "main": "index.js",
   "repository": {
