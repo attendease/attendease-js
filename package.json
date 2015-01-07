@@ -3,12 +3,15 @@
   "description": "Official JavaScript/Node SDK for Attendease.",
   "version": "0.2.4",
   "url": "http://github.com/attendease/attendease-js",
-  "main": "index.js",
+  "main": "dist/attendease.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/attendease/attendease-js.git"
   },
   "dependencies": {
     "jquery": "~2.1.0" 
+  },
+  "scripts": {
+    "build": "webpack src/attendease.js dist/attendease.js"
   }
 }

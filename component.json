@@ -10,7 +10,7 @@
     "sdk"
   ],
   "scripts": [
-    "index.js"
+    "dist/attendease.js"
   ],
   "dependencies": {
     "components/jquery": "~2.1.0" 
