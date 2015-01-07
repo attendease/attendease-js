@@ -25,7 +25,6 @@
       type: "GET",
       url: this.apiRoot() + 'api/' + resource + '.json',
       data: this.credentials(),
-      dataType: 'jsonp',
       success: function(response) {
         localStorage[resource] = JSON.stringify(response)
         def.resolve(response)
@@ -38,7 +37,6 @@
     return def.promise()
   }
 
-
   // Authenticate as a registered attendee. Returns a promise.
   Client.prototype.login = function(credentials) {
     this.logout()
@@ -46,10 +44,7 @@
     return $.ajax({
       type: "POST",
       url: this.apiRoot() + 'api/authenticate.json',
-      async: true,
       data: credentials,
-      dataType: 'jsonp',
-      timeout: 45000,
       success: function(response) {
         localStorage.user_details = JSON.stringify(response)
 
@@ -141,10 +136,7 @@
     return $.ajax({
       type: "POST",
       url: this.apiRoot() + 'api/schedule/' + instanceId + '.json',
-      async: true,
-      data: this.credentials(),
-      dataType: 'jsonp',
-      timeout: 45000
+      data: this.credentials()
     })
   }
 
@@ -153,10 +145,7 @@
     return $.ajax({
       type: "POST",
       url: this.apiRoot() + 'api/unschedule/' + instanceId + '.json',
-      async: true,
-      data: this.credentials(),
-      dataType: 'jsonp',
-      timeout: 45000
+      data: this.credentials()
     })
   }
 
@@ -168,10 +157,7 @@
     return $.ajax({
       type: "POST",
       url: this.apiRoot() + 'api/likes/' + id,
-      async: true,
-      data: data,
-      dataType: 'jsonp',
-      timeout: 45000
+      data: data
     })
   }
 
@@ -180,10 +166,7 @@
     return $.ajax({
       type: "POST",
       url: this.apiRoot() + 'api/likes_remove/' + id,
-      async: true,
-      data: this.credentials(),
-      dataType: 'jsonp',
-      timeout: 45000
+      data: this.credentials()
     })
   }
 
@@ -197,11 +180,8 @@
 
     return $.ajax({
       type: "POST",
-      url: this.apiRoot() + 'api/rate',
-      async: true,
-      data: data,
-      dataType: 'jsonp',
-      timeout: 45000
+      url: this.apiRoot() + 'api/rate.json',
+      data: data
     })
   }
 
