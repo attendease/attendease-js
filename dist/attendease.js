@@ -135,8 +135,7 @@
 	      localStorage.user_details = JSON.stringify(response)
 
 	      localStorage.credentials = JSON.stringify({
-	        email: credentials.email,
-	        password: credentials.password
+	        attendee_token: response.access_token
 	      })
 	    }
 	  })
