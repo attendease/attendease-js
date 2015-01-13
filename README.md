@@ -60,6 +60,12 @@ attendease.rooms()
 
 // fetch venues
 attendease.venues()
+
+// fetch schedule statuses
+attendease.scheduleStatuses()
+
+// get status for a particular instance
+attendease.scheduleStatus('[instanceId]')
 ```
 
 ### Write API
