@@ -15,3 +15,14 @@ exports.unschedule = function(instanceId) {
     data: this.credentials()
   })
 }
+
+// Returns the user's schedule status for the session instance.
+exports.scheduleStatus = function(instanceId) {
+  var def = $.Deferred()
+
+  this.scheduleStatuses().then(function(statuses) {
+    def.resolve(statuses[instanceId])
+  })
+
+  return def.promise()
+}
