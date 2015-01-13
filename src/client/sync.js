@@ -28,7 +28,6 @@ exports.sessions = function(sync) {
   return this.sync('sessions')
 }
 
-
 // Fetches and returns all presenters for the event.
 exports.presenters = function(sync) {
   return this.sync('presenters')
@@ -42,5 +41,10 @@ exports.rooms = function(sync) {
 // Fetches and returns all venues for the event.
 exports.venues = function(sync) {
   return this.sync('venues')
+}
+
+// Fetches and returns all venues for the event.
+exports.scheduleStatuses = function(sync) {
+  return this.sync('schedule_status')
 }
 
