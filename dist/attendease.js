@@ -76,30 +76,13 @@
 	  return this.endpoint || ('https://' + this.subdomain + '.attendease.com/')
 	}
 
-	// Syncs the resource with Attendease event API. Returns a promise.
-	Client.prototype.sync = function(resource) {
-	  var def = $.Deferred()
-
-	  $.ajax({
-	    type: "GET",
-	    url: this.apiRoot() + 'api/' + resource + '.json',
-	    data: this.credentials(),
-	    success: function(response) {
-	      localStorage[resource] = JSON.stringify(response)
-	      def.resolve(response)
-	    },
-	    error: function() {
-	      def.reject()
-	    }
-	  })
-
-	  return def.promise()
-	}
-
 	// Mixin instance methods.
 	util.extend(Client.prototype, __webpack_require__(3))
 	util.extend(Client.prototype, __webpack_require__(4))
 	util.extend(Client.prototype, __webpack_require__(5))
+	util.extend(Client.prototype, __webpack_require__(6))
+	util.extend(Client.prototype, __webpack_require__(7))
+	util.extend(Client.prototype, __webpack_require__(8))
 
 	// Export
 	module.exports = Client
@@ -172,6 +155,26 @@
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
+	// Syncs the resource with Attendease event API. Returns a promise.
+	exports.sync = function(resource) {
+	  var def = $.Deferred()
+
+	  $.ajax({
+	    type: "GET",
+	    url: this.apiRoot() + 'api/' + resource + '.json',
+	    data: this.credentials(),
+	    success: function(response) {
+	      localStorage[resource] = JSON.stringify(response)
+	      def.resolve(response)
+	    },
+	    error: function() {
+	      def.reject()
+	    }
+	  })
+
+	  return def.promise()
+	}
+
 	// Fetches and returns the event details.
 	exports.event = function(sync) {
 	  return this.sync('event')
@@ -181,6 +184,32 @@
 	exports.sessions = function(sync) {
 	  return this.sync('sessions')
 	}
+
+	// Fetches and returns all presenters for the event.
+	exports.presenters = function(sync) {
+	  return this.sync('presenters')
+	}
+
+	// Fetches and returns all rooms for the event.
+	exports.rooms = function(sync) {
+	  return this.sync('rooms')
+	}
+
+	// Fetches and returns all venues for the event.
+	exports.venues = function(sync) {
+	  return this.sync('venues')
+	}
+
+	// Fetches and returns all venues for the event.
+	exports.scheduleStatuses = function(sync) {
+	  return this.sync('schedule_status')
+	}
+
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
 
 	// Fetches and returns all sessions (mapped as instances) for the event.
 	exports.instances = function(sync) {
@@ -207,44 +236,10 @@
 	  return def.promise()
 	}
 
-	// Fetches and returns all presenters for the event.
-	exports.presenters = function(sync) {
-	  return this.sync('presenters')
-	}
-
-	// Fetches and returns all rooms for the event.
-	exports.rooms = function(sync) {
-	  return this.sync('rooms')
-	}
-
-	// Fetches and returns all venues for the event.
-	exports.venues = function(sync) {
-	  return this.sync('venues')
-	}
-
-
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
-
-	// Schedules the current user for the session instance.
-	exports.schedule = function(instanceId) {
-	  return $.ajax({
-	    type: "POST",
-	    url: this.apiRoot() + 'api/schedule/' + instanceId + '.json',
-	    data: this.credentials()
-	  })
-	}
-
-	// Unschedules the current user from the session instance.
-	exports.unschedule = function(instanceId) {
-	  return $.ajax({
-	    type: "POST",
-	    url: this.apiRoot() + 'api/unschedule/' + instanceId + '.json',
-	    data: this.credentials()
-	  })
-	}
 
 	// Likes the item for the current user.
 	exports.like = function(id, type) {
@@ -267,6 +262,11 @@
 	  })
 	}
 
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// Likes the item for the current user.
 	exports.rate = function(id, type, rating) {
 	  var data = this.credentials()
@@ -280,6 +280,40 @@
 	    url: this.apiRoot() + 'api/rate.json',
 	    data: data
 	  })
+	}
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// Schedules the current user for the session instance.
+	exports.schedule = function(instanceId) {
+	  return $.ajax({
+	    type: "POST",
+	    url: this.apiRoot() + 'api/schedule/' + instanceId + '.json',
+	    data: this.credentials()
+	  })
+	}
+
+	// Unschedules the current user from the session instance.
+	exports.unschedule = function(instanceId) {
+	  return $.ajax({
+	    type: "POST",
+	    url: this.apiRoot() + 'api/unschedule/' + instanceId + '.json',
+	    data: this.credentials()
+	  })
+	}
+
+	// Returns the user's schedule status for the session instance.
+	exports.scheduleStatus = function(instanceId) {
+	  var def = $.Deferred()
+
+	  this.scheduleStatuses().then(function(statuses) {
+	    def.resolve(statuses[instanceId])
+	  })
+
+	  return def.promise()
 	}
 
 

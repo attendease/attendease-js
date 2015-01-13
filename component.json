@@ -2,7 +2,7 @@
   "name": "attendease",
   "repo": "attendease/attendease-js",
   "description": "Official JavaScript/Node SDK for Attendease.",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "keywords": [
     "attendease",
     "event",
