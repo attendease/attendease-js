@@ -61,6 +61,9 @@ attendease.rooms()
 // fetch venues
 attendease.venues()
 
+// fetch filters
+attendease.filters()
+
 // fetch schedule statuses
 attendease.scheduleStatuses()
 
