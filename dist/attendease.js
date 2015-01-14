@@ -201,6 +201,11 @@
 	}
 
 	// Fetches and returns all venues for the event.
+	exports.filters = function(sync) {
+	  return this.sync('filters')
+	}
+
+	// Fetches and returns all venues for the event.
 	exports.scheduleStatuses = function(sync) {
 	  return this.sync('schedule_status')
 	}
