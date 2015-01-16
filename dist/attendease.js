@@ -83,6 +83,7 @@
 	util.extend(Client.prototype, __webpack_require__(6))
 	util.extend(Client.prototype, __webpack_require__(7))
 	util.extend(Client.prototype, __webpack_require__(8))
+	util.extend(Client.prototype, __webpack_require__(9))
 
 	// Export
 	module.exports = Client
@@ -150,22 +151,64 @@
 	}
 
 
-
 /***/ },
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// Syncs the resource with Attendease event API. Returns a promise.
+	// Appends new items and updates existing items on the current localStorage
+	// collection for the given resource and dataset.
+	var mergeData = function(resource, data) {
+	  var current = localStorage[resource]
+	  var merged = current ? JSON.parse(current) : null
+	  var index = {}, existing
+
+	  if (Array.isArray(merged)) {
+	    merged.forEach(function(item) {
+	      index[item.id] = item
+	    })
+
+	    data.forEach(function(item) {
+	      if (existing = index[item.id]) {
+	        merged.splice(current.indexOf(existing), 1, item)
+	      } else {
+	        merged.push(item)
+	      }
+	    })
+	  } else {
+	    merged = data
+	  }
+
+	  localStorage[resource] = JSON.stringify(merged)
+	  return merged
+	}
+
+	// Returns the last sync timestamp for the given resource.
+	var lastSync = function(resource) {
+	  return localStorage['last_sync_' + resource]
+	}
+
+	// Updates the last sync timestamp for the given resource and timestamp.
+	var updateLastSync = function(resource, timestamp) {
+	  localStorage['last_sync_' + resource] = timestamp
+	}
+
+	// Syncs the resource with Attendease event API and stores in localStorage.
 	exports.sync = function(resource) {
 	  var def = $.Deferred()
+	  var data = this.credentials()
+	  var timestamp = Math.floor(Date.now() / 1000)
+	  var merged
+
+	  data.since = lastSync(resource)
 
 	  $.ajax({
 	    type: "GET",
 	    url: this.apiRoot() + 'api/' + resource + '.json',
-	    data: this.credentials(),
+	    data: data,
 	    success: function(response) {
-	      localStorage[resource] = JSON.stringify(response)
-	      def.resolve(response)
+	      merged = mergeData(resource, response)
+	      updateLastSync(resource, timestamp)
+	      def.resolve(merged)
 	    },
 	    error: function() {
 	      def.reject()
@@ -175,63 +218,78 @@
 	  return def.promise()
 	}
 
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// Fetches the resource from localStorage if there is existing data available in
+	// localStorage, otherwise a server sync will happen. If sync is true, the
+	// server sync will happen unconditionally.
+	exports.fetch = function(resource, sync) {
+	  var def = $.Deferred()
+	  var data
+
+	  if (!sync && (data = localStorage[resource])) {
+	    def.resolve(JSON.parse(data))
+	    return def.promise()
+	  } else {
+	    return this.sync(resource)
+	  }
+	}
+
 	// Fetches and returns the event details.
 	exports.event = function(sync) {
-	  return this.sync('event')
+	  return this.fetch('event', sync)
 	}
 
 	// Fetches and returns all sessions for the event.
 	exports.sessions = function(sync) {
-	  return this.sync('sessions')
+	  return this.fetch('sessions', sync)
 	}
 
 	// Fetches and returns all presenters for the event.
 	exports.presenters = function(sync) {
-	  return this.sync('presenters')
+	  return this.fetch('presenters', sync)
 	}
 
 	// Fetches and returns all rooms for the event.
 	exports.rooms = function(sync) {
-	  return this.sync('rooms')
+	  return this.fetch('rooms', sync)
 	}
 
 	// Fetches and returns all venues for the event.
 	exports.venues = function(sync) {
-	  return this.sync('venues')
+	  return this.fetch('venues', sync)
 	}
 
 	// Fetches and returns all venues for the event.
 	exports.filters = function(sync) {
-	  return this.sync('filters')
+	  return this.fetch('filters', sync)
 	}
 
 	// Fetches and returns all venues for the event.
 	exports.scheduleStatuses = function(sync) {
-	  return this.sync('schedule_status')
+	  return this.fetch('schedule_status', sync)
 	}
 
 
-
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Fetches and returns all sessions (mapped as instances) for the event.
 	exports.instances = function(sync) {
 	  var def = $.Deferred()
 	  var instances = []
-	  var i, ii, session, instance
 
-	  this.sessions().then(function(sessions) {
-	    for (i = 0; i < sessions.length; i++) {
-	      session = sessions[i]
-
-	      for (ii = 0; ii < (session.instances || []).length; ii++) {
-	        instance = session.instances[ii]
+	  this.sessions(sync).then(function(sessions) {
+	    sessions.forEach(function(session) {
+	      (session.instances || []).forEach(function(instance) {
 	        instance.session = session
 	        instances.push(instance)
-	      }
-	    }
+	      })
+	    })
 
 	    def.resolve(instances)
 	  }, function() {
@@ -243,7 +301,7 @@
 
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Likes the item for the current user.
@@ -269,7 +327,7 @@
 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Likes the item for the current user.
@@ -289,7 +347,7 @@
 
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Schedules the current user for the session instance.
