@@ -20,7 +20,7 @@ exports.unschedule = function(instanceId) {
 exports.scheduleStatus = function(instanceId) {
   var def = $.Deferred()
 
-  this.scheduleStatuses().then(function(statuses) {
+  this.scheduleStatuses(true).then(function(statuses) {
     def.resolve(statuses[instanceId])
   })
 
