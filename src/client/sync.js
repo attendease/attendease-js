@@ -25,6 +25,42 @@ var mergeData = function(resource, data) {
   return merged
 }
 
+var resourceMap = {
+  session_ids:   'sessions',
+  room_ids:      'rooms',
+  presenter_ids: 'presenters',
+  filter_ids:    'filters'
+}
+
+// Removes items from the current localStorage collections.
+var removeData = function(data) {
+  var index, resource, resourceName, ids, items, existing
+
+  for (resource in data) {
+    if (data.hasOwnProperty(resource)) {
+      ids = data[resource]
+      resourceName = resourceMap[resource]
+      
+      if (ids.length && (items = localStorage[resourceName])) {
+        items = JSON.parse(items)
+        index = {}
+
+        items.forEach(function(item) {
+          index[item.id] = item
+        })
+
+        ids.forEach(function(id) {
+          if (existing = index[id]) {
+            items.splice(items.indexOf(existing), 1)
+          }
+        })
+
+        localStorage[resourceName] = JSON.stringify(items)
+      }
+    }
+  }
+}
+
 // Returns the last sync timestamp for the given resource.
 var lastSync = function(resource) {
   return localStorage['last_sync_' + resource]
@@ -52,6 +88,32 @@ exports.sync = function(resource) {
       merged = mergeData(resource, response)
       updateLastSync(resource, timestamp)
       def.resolve(merged)
+    },
+    error: function() {
+      def.reject()
+    }
+  })
+
+  return def.promise()
+}
+
+// Syncs the deleted resources with Attendease event API and updates the
+// collection in localStorage.
+exports.syncDeletions = function() {
+  var def = $.Deferred()
+  var data = this.credentials()
+  var timestamp = Math.floor(Date.now() / 1000)
+
+  data.since = lastSync('deletions')
+
+  $.ajax({
+    type: "GET",
+    url: this.apiRoot() + 'api/deletions.json',
+    data: data,
+    success: function(response) {
+      removeData(response)
+      updateLastSync('deletions', timestamp)
+      def.resolve()
     },
     error: function() {
       def.reject()
