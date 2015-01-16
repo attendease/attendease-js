@@ -12,7 +12,7 @@ var mergeData = function(resource, data) {
 
     data.forEach(function(item) {
       if (existing = index[item.id]) {
-        merged.splice(current.indexOf(existing), 1, item)
+        merged.splice(merged.indexOf(existing), 1, item)
       } else {
         merged.push(item)
       }
