@@ -1,14 +1,57 @@
-// Syncs the resource with Attendease event API. Returns a promise.
+// Appends new items and updates existing items on the current localStorage
+// collection for the given resource and dataset.
+var mergeData = function(resource, data) {
+  var current = localStorage[resource]
+  var merged = current ? JSON.parse(current) : null
+  var index = {}, existing
+
+  if (Array.isArray(merged)) {
+    merged.forEach(function(item) {
+      index[item.id] = item
+    })
+
+    data.forEach(function(item) {
+      if (existing = index[item.id]) {
+        merged.splice(current.indexOf(existing), 1, item)
+      } else {
+        merged.push(item)
+      }
+    })
+  } else {
+    merged = data
+  }
+
+  localStorage[resource] = JSON.stringify(merged)
+  return merged
+}
+
+// Returns the last sync timestamp for the given resource.
+var lastSync = function(resource) {
+  return localStorage['last_sync_' + resource]
+}
+
+// Updates the last sync timestamp for the given resource and timestamp.
+var updateLastSync = function(resource, timestamp) {
+  localStorage['last_sync_' + resource] = timestamp
+}
+
+// Syncs the resource with Attendease event API and stores in localStorage.
 exports.sync = function(resource) {
   var def = $.Deferred()
+  var data = this.credentials()
+  var timestamp = Math.floor(Date.now() / 1000)
+  var merged
+
+  data.since = lastSync(resource)
 
   $.ajax({
     type: "GET",
     url: this.apiRoot() + 'api/' + resource + '.json',
-    data: this.credentials(),
+    data: data,
     success: function(response) {
-      localStorage[resource] = JSON.stringify(response)
-      def.resolve(response)
+      merged = mergeData(resource, response)
+      updateLastSync(resource, timestamp)
+      def.resolve(merged)
     },
     error: function() {
       def.reject()
@@ -17,39 +60,3 @@ exports.sync = function(resource) {
 
   return def.promise()
 }
-
-// Fetches and returns the event details.
-exports.event = function(sync) {
-  return this.sync('event')
-}
-
-// Fetches and returns all sessions for the event.
-exports.sessions = function(sync) {
-  return this.sync('sessions')
-}
-
-// Fetches and returns all presenters for the event.
-exports.presenters = function(sync) {
-  return this.sync('presenters')
-}
-
-// Fetches and returns all rooms for the event.
-exports.rooms = function(sync) {
-  return this.sync('rooms')
-}
-
-// Fetches and returns all venues for the event.
-exports.venues = function(sync) {
-  return this.sync('venues')
-}
-
-// Fetches and returns all venues for the event.
-exports.filters = function(sync) {
-  return this.sync('filters')
-}
-
-// Fetches and returns all venues for the event.
-exports.scheduleStatuses = function(sync) {
-  return this.sync('schedule_status')
-}
-

@@ -14,6 +14,7 @@ Client.prototype.apiRoot = function() {
 // Mixin instance methods.
 util.extend(Client.prototype, require('./client/auth'))
 util.extend(Client.prototype, require('./client/sync'))
+util.extend(Client.prototype, require('./client/fetch'))
 util.extend(Client.prototype, require('./client/instances'))
 util.extend(Client.prototype, require('./client/liking'))
 util.extend(Client.prototype, require('./client/rating'))

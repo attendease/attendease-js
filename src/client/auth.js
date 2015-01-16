@@ -40,4 +40,3 @@ exports.user = function(sync) {
 exports.credentials = function() {
   return JSON.parse(localStorage.credentials)
 }
-

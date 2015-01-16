@@ -3,7 +3,7 @@ exports.instances = function(sync) {
   var def = $.Deferred()
   var instances = []
 
-  this.sessions().then(function(sessions) {
+  this.sessions(sync).then(function(sessions) {
     sessions.forEach(function(session) {
       (session.instances || []).forEach(function(instance) {
         instance.session = session
