@@ -169,7 +169,7 @@
 
 	    data.forEach(function(item) {
 	      if (existing = index[item.id]) {
-	        merged.splice(current.indexOf(existing), 1, item)
+	        merged.splice(merged.indexOf(existing), 1, item)
 	      } else {
 	        merged.push(item)
 	      }
@@ -180,6 +180,42 @@
 
 	  localStorage[resource] = JSON.stringify(merged)
 	  return merged
+	}
+
+	var resourceMap = {
+	  session_ids:   'sessions',
+	  room_ids:      'rooms',
+	  presenter_ids: 'presenters',
+	  filter_ids:    'filters'
+	}
+
+	// Removes items from the current localStorage collections.
+	var removeData = function(data) {
+	  var index, resource, resourceName, ids, items, existing
+
+	  for (resource in data) {
+	    if (data.hasOwnProperty(resource)) {
+	      ids = data[resource]
+	      resourceName = resourceMap[resource]
+	      
+	      if (ids.length && (items = localStorage[resourceName])) {
+	        items = JSON.parse(items)
+	        index = {}
+
+	        items.forEach(function(item) {
+	          index[item.id] = item
+	        })
+
+	        ids.forEach(function(id) {
+	          if (existing = index[id]) {
+	            items.splice(items.indexOf(existing), 1)
+	          }
+	        })
+
+	        localStorage[resourceName] = JSON.stringify(items)
+	      }
+	    }
+	  }
 	}
 
 	// Returns the last sync timestamp for the given resource.
@@ -209,6 +245,32 @@
 	      merged = mergeData(resource, response)
 	      updateLastSync(resource, timestamp)
 	      def.resolve(merged)
+	    },
+	    error: function() {
+	      def.reject()
+	    }
+	  })
+
+	  return def.promise()
+	}
+
+	// Syncs the deleted resources with Attendease event API and updates the
+	// collection in localStorage.
+	exports.syncDeletions = function() {
+	  var def = $.Deferred()
+	  var data = this.credentials()
+	  var timestamp = Math.floor(Date.now() / 1000)
+
+	  data.since = lastSync('deletions')
+
+	  $.ajax({
+	    type: "GET",
+	    url: this.apiRoot() + 'api/deletions.json',
+	    data: data,
+	    success: function(response) {
+	      removeData(response)
+	      updateLastSync('deletions', timestamp)
+	      def.resolve()
 	    },
 	    error: function() {
 	      def.reject()
@@ -372,7 +434,7 @@
 	exports.scheduleStatus = function(instanceId) {
 	  var def = $.Deferred()
 
-	  this.scheduleStatuses().then(function(statuses) {
+	  this.scheduleStatuses(true).then(function(statuses) {
 	    def.resolve(statuses[instanceId])
 	  })
 
