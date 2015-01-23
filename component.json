@@ -2,7 +2,7 @@
   "name": "attendease",
   "repo": "attendease/attendease-js",
   "description": "Official JavaScript/Node SDK for Attendease.",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "keywords": [
     "attendease",
     "event",
@@ -13,6 +13,6 @@
     "dist/attendease.js"
   ],
   "dependencies": {
-    "components/jquery": "~2.1.0" 
+    "components/jquery": "~2.1.0"
   }
 }
