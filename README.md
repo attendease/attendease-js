@@ -89,3 +89,18 @@ attendease.schedule('[instanceId]')
 // unschedule an instance
 attendease.unschedule('[instanceId]')
 ```
+
+### Build the library
+
+Make sure you have webpack installed
+
+```
+npm install
+```
+
+Build the library into dist
+
+```
+npm run build
+```
+
