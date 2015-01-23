@@ -40,7 +40,7 @@ var removeData = function(data) {
     if (data.hasOwnProperty(resource)) {
       ids = data[resource]
       resourceName = resourceMap[resource]
-      
+
       if (ids.length && (items = localStorage[resourceName])) {
         items = JSON.parse(items)
         index = {}
@@ -79,6 +79,7 @@ exports.sync = function(resource) {
   var merged
 
   data.since = lastSync(resource)
+  data.meta = true
 
   $.ajax({
     type: "GET",
