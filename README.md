@@ -90,17 +90,22 @@ attendease.schedule('[instanceId]')
 attendease.unschedule('[instanceId]')
 ```
 
-### Build the library
+### Building
 
-Make sure you have webpack installed
+Make sure you install any development dependencies.
 
 ```
 npm install
 ```
 
-Build the library into dist
+Build the library into dist (using webpack).
 
 ```
 npm run build
 ```
 
+Or to have webpack watch files for changes and do builds automatically.
+
+```
+npm run watch
+```

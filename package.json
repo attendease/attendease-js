@@ -15,6 +15,7 @@
     "webpack": "*"
   },
   "scripts": {
-    "build": "webpack src/attendease.js dist/attendease.js"
+    "build": "webpack src/attendease.js dist/attendease.js",
+    "watch": "webpack src/attendease.js dist/attendease.js --watch"
   }
 }
