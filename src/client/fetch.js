@@ -38,12 +38,12 @@ exports.venues = function(sync) {
   return this.fetch('venues', sync)
 }
 
-// Fetches and returns all venues for the event.
+// Fetches and returns all filters for the event.
 exports.filters = function(sync) {
   return this.fetch('filters', sync)
 }
 
-// Fetches and returns all venues for the event.
+// Fetches and returns the user's schedule statuses.
 exports.scheduleStatuses = function(sync) {
   return this.fetch('schedule_status', sync)
 }
