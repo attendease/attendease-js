@@ -247,9 +247,7 @@
 	      updateLastSync(resource, timestamp)
 	      def.resolve(merged)
 	    },
-	    error: function() {
-	      def.reject()
-	    }
+	    error: def.reject
 	  })
 
 	  return def.promise()
@@ -258,27 +256,20 @@
 	// Syncs the deleted resources with Attendease event API and updates the
 	// collection in localStorage.
 	exports.syncDeletions = function() {
-	  var def = $.Deferred()
 	  var data = this.credentials()
 	  var timestamp = Math.floor(Date.now() / 1000)
 
 	  data.since = lastSync('deletions')
 
-	  $.ajax({
+	  return $.ajax({
 	    type: "GET",
 	    url: this.apiRoot() + 'api/deletions.json',
 	    data: data,
 	    success: function(response) {
 	      removeData(response)
 	      updateLastSync('deletions', timestamp)
-	      def.resolve()
-	    },
-	    error: function() {
-	      def.reject()
 	    }
 	  })
-
-	  return def.promise()
 	}
 
 
@@ -326,12 +317,12 @@
 	  return this.fetch('venues', sync)
 	}
 
-	// Fetches and returns all venues for the event.
+	// Fetches and returns all filters for the event.
 	exports.filters = function(sync) {
 	  return this.fetch('filters', sync)
 	}
 
-	// Fetches and returns all venues for the event.
+	// Fetches and returns the user's schedule statuses.
 	exports.scheduleStatuses = function(sync) {
 	  return this.fetch('schedule_status', sync)
 	}
@@ -355,9 +346,7 @@
 	    })
 
 	    def.resolve(instances)
-	  }, function() {
-	    def.reject()
-	  })
+	  }, def.reject)
 
 	  return def.promise()
 	}
