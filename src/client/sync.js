@@ -90,9 +90,7 @@ exports.sync = function(resource) {
       updateLastSync(resource, timestamp)
       def.resolve(merged)
     },
-    error: function() {
-      def.reject()
-    }
+    error: def.reject
   })
 
   return def.promise()
@@ -101,25 +99,18 @@ exports.sync = function(resource) {
 // Syncs the deleted resources with Attendease event API and updates the
 // collection in localStorage.
 exports.syncDeletions = function() {
-  var def = $.Deferred()
   var data = this.credentials()
   var timestamp = Math.floor(Date.now() / 1000)
 
   data.since = lastSync('deletions')
 
-  $.ajax({
+  return $.ajax({
     type: "GET",
     url: this.apiRoot() + 'api/deletions.json',
     data: data,
     success: function(response) {
       removeData(response)
       updateLastSync('deletions', timestamp)
-      def.resolve()
-    },
-    error: function() {
-      def.reject()
     }
   })
-
-  return def.promise()
 }

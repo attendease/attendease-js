@@ -12,9 +12,7 @@ exports.instances = function(sync) {
     })
 
     def.resolve(instances)
-  }, function() {
-    def.reject()
-  })
+  }, def.reject)
 
   return def.promise()
 }
