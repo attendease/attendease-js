@@ -4,10 +4,10 @@ Official JavaScript/Node SDK for [Attendease](https://attendease.com/).
 
 ### Installation
 
-Install with [npm](https://www.npmjs.org/), [component(1)](http://component.io) or [bower](http://bower.io/) (recommended).
+Install with [bower](http://bower.io/) or [npm](https://www.npmjs.org/) (recommended).
 
 ```
-$ bower install attendease
+$ npm install attendease
 ```
 
 ### Getting Started
