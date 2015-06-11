@@ -15,13 +15,13 @@ $ bower install attendease
 If in Node or using a CommonJS style loader, simply require the module and initialize a client.
 
 ```javascript
-attendease = require('attendease')('event-subdomain')
+attendease = require('attendease')('[your event subdomain]')
 ```
 
 If in the browser, attendease-js occupies an `Attendease` global that you can use to initialize a client.
 
 ```javascript
-attendease = Attendease('event-subdomain')
+attendease = Attendease('[your event subdomain]')
 ```
 
 ### Authentication
@@ -29,8 +29,8 @@ attendease = Attendease('event-subdomain')
 ```javascript
 // authenticate as an attendee
 attendease.login({
-  email: '[email]',
-  password: '[password]'
+  email: '[your email]',
+  password: '[your password]'
 })
 
 // get user details
@@ -68,26 +68,38 @@ attendease.filters()
 attendease.scheduleStatuses()
 
 // get status for a particular instance
-attendease.scheduleStatus('[instanceId]')
+attendease.scheduleStatus(instanceId)
 ```
 
 ### Write API
 
 ```javascript
 // like an item
-attendease.like('[presenterId]', 'presenter')
+attendease.like(presenterId, 'presenter')
 
 // unlike an item
-attendease.unlike('[likeId]')
+attendease.unlike(likeId)
 
 // rate an item
-attendease.rate('[sessionId]', 'session', 4)
+attendease.rate(sessionId, 'session', 4)
 
 // schedule an instance
-attendease.schedule('[instanceId]')
+attendease.schedule(instanceId)
 
 // unschedule an instance
-attendease.unschedule('[instanceId]')
+attendease.unschedule(instanceId)
+
+// check-in to the event
+attendease.checkin('event')
+
+// check-in to a session instance
+attendease.checkin('instance', instanceId)
+
+// undo a check-in to the event
+attendease.undoCheckin('event')
+
+// undo a check-in to a session instance
+attendease.undoCheckin('instance', instanceId)
 ```
 
 ### Building
