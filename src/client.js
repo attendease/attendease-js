@@ -19,6 +19,7 @@ util.extend(Client.prototype, require('./client/instances'))
 util.extend(Client.prototype, require('./client/liking'))
 util.extend(Client.prototype, require('./client/rating'))
 util.extend(Client.prototype, require('./client/scheduling'))
+util.extend(Client.prototype, require('./client/checkins'))
 
 // Export
 module.exports = Client
