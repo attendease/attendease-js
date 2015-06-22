@@ -102,7 +102,7 @@ attendease.undoCheckin('event')
 attendease.undoCheckin('instance', instanceId)
 ```
 
-### Building
+### Building and testing
 
 Make sure you install any development dependencies.
 
@@ -110,7 +110,7 @@ Make sure you install any development dependencies.
 npm install
 ```
 
-Build the library into dist (using webpack).
+Build the library into `./dist`.
 
 ```
 npm run build
@@ -120,4 +120,10 @@ Or to have webpack watch files for changes and do builds automatically.
 
 ```
 npm run watch
+```
+
+And to run the test suite.
+
+```
+npm test
 ```
