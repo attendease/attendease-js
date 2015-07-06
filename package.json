@@ -12,9 +12,20 @@
     "jquery": "~2.1.0"
   },
   "devDependencies": {
+    "babel-core": "^5.5.6",
+    "babel-loader": "^5.1.4",
+    "jasmine": "^2.3.1",
+    "jasmine-core": "^2.3.4",
+    "karma": "^0.12.36",
+    "karma-jasmine": "^0.3.5",
+    "karma-jasmine-ajax": "^0.1.12",
+    "karma-phantomjs-launcher": "^0.2.0",
+    "karma-webpack": "^1.5.1",
+    "phantomjs": "^1.9.17",
     "webpack": "*"
   },
   "scripts": {
+    "test": "karma start",
     "build": "webpack src/attendease.js dist/attendease.js",
     "watch": "webpack src/attendease.js dist/attendease.js --watch"
   }
