@@ -1,10 +1,11 @@
 var request = require('axios')
 var when = require('when')
+var cache = require('../cache')
 
-// Appends new items and updates existing items on the current localStorage
+// Appends new items and updates existing items on the current cached
 // collection for the given resource and dataset.
 var mergeData = function(resource, data) {
-  var current = localStorage[resource]
+  var current = cache[resource]
   var merged = current ? JSON.parse(current) : null
   var index = {}, existing
 
@@ -24,7 +25,7 @@ var mergeData = function(resource, data) {
     merged = data
   }
 
-  localStorage[resource] = JSON.stringify(merged)
+  cache[resource] = JSON.stringify(merged)
   return merged
 }
 
@@ -35,7 +36,7 @@ var resourceMap = {
   filter_ids:    'filters'
 }
 
-// Removes items from the current localStorage collections.
+// Removes items from the current cached collections.
 var removeData = function(data) {
   var index, resource, resourceName, ids, items, existing
 
@@ -44,7 +45,7 @@ var removeData = function(data) {
       ids = data[resource]
       resourceName = resourceMap[resource]
 
-      if (ids.length && (items = localStorage[resourceName])) {
+      if (ids.length && (items = cache[resourceName])) {
         items = JSON.parse(items)
         index = {}
 
@@ -58,7 +59,7 @@ var removeData = function(data) {
           }
         })
 
-        localStorage[resourceName] = JSON.stringify(items)
+        cache[resourceName] = JSON.stringify(items)
       }
     }
   }
@@ -66,15 +67,15 @@ var removeData = function(data) {
 
 // Returns the last sync timestamp for the given resource.
 var lastSync = function(resource) {
-  return localStorage['last_sync_' + resource]
+  return cache['last_sync_' + resource]
 }
 
 // Updates the last sync timestamp for the given resource and timestamp.
 var updateLastSync = function(resource, timestamp) {
-  localStorage['last_sync_' + resource] = timestamp
+  cache['last_sync_' + resource] = timestamp
 }
 
-// Syncs the resource with Attendease event API and stores in localStorage.
+// Syncs the resource with Attendease event API and stores in the cache.
 exports.sync = function(resource) {
   var self = this
 
@@ -96,7 +97,7 @@ exports.sync = function(resource) {
 }
 
 // Syncs the deleted resources with Attendease event API and updates the
-// collection in localStorage.
+// collection in the cache.
 exports.syncDeletions = function() {
   var url = this.apiRoot() + 'api/deletions.json'
   var data = this.credentials()

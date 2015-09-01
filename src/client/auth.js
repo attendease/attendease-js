@@ -1,5 +1,6 @@
 var request = require('axios')
 var when = require('when')
+var cache = require('../cache')
 
 // Authenticate as a registered attendee. Returns a promise.
 exports.login = function(credentials) {
@@ -8,9 +9,9 @@ exports.login = function(credentials) {
   var url = this.apiRoot() + 'api/authenticate.json'
 
   return request.post(url, credentials).then(function(response) {
-    localStorage.user_details = JSON.stringify(response.data)
+    cache.user_details = JSON.stringify(response.data)
 
-    localStorage.credentials = JSON.stringify({
+    cache.credentials = JSON.stringify({
       attendee_token: response.data.access_token
     })
   })
@@ -19,7 +20,7 @@ exports.login = function(credentials) {
 // Logout. Returns a promise.
 exports.logout = function() {
   return when.promise(function(resolve, reject) {
-    localStorage.clear()
+    cache.clear()
     resolve()
   })
 }
@@ -31,12 +32,12 @@ exports.user = function(sync) {
   if (sync) {
     return this.sync('user_details')
   } else {
-    data = localStorage.user_details
+    data = cache.user_details
     return data ? JSON.parse(data) : false
   }
 }
 
 // Returns the credentials for the current user.
 exports.credentials = function() {
-  return JSON.parse(localStorage.credentials)
+  return JSON.parse(cache.credentials)
 }

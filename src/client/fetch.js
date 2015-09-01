@@ -1,12 +1,13 @@
 var when = require('when')
+var cache = require('../cache')
 
-// Fetches the resource from localStorage if there is existing data available in
-// localStorage, otherwise a server sync will happen. If sync is true, the
+// Fetches the resource from the cache if there is existing data available in
+// the cache, otherwise a server sync will happen. If sync is true, the
 // server sync will happen unconditionally.
 exports.fetch = function(resource, sync) {
   var data
 
-  if (!sync && (data = localStorage[resource])) {
+  if (!sync && (data = cache[resource])) {
     return when.promise(function(resolve) {
       resolve(JSON.parse(data))
     })
