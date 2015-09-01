@@ -1,27 +1,27 @@
+var request = require('axios')
+var when = require('when')
+
 // Authenticate as a registered attendee. Returns a promise.
 exports.login = function(credentials) {
   this.logout()
 
-  return $.ajax({
-    type: "POST",
-    url: this.apiRoot() + 'api/authenticate.json',
-    data: credentials,
-    success: function(response) {
-      localStorage.user_details = JSON.stringify(response)
+  var url = this.apiRoot() + 'api/authenticate.json'
 
-      localStorage.credentials = JSON.stringify({
-        attendee_token: response.access_token
-      })
-    }
+  return request.post(url, credentials).then(function(response) {
+    localStorage.user_details = JSON.stringify(response.data)
+
+    localStorage.credentials = JSON.stringify({
+      attendee_token: response.data.access_token
+    })
   })
 }
 
 // Logout. Returns a promise.
 exports.logout = function() {
-  var def = $.Deferred()
-  localStorage.clear()
-  def.resolve()
-  return def.promise()
+  return when.promise(function(resolve, reject) {
+    localStorage.clear()
+    resolve()
+  })
 }
 
 // Returns the current user object.

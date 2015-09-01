@@ -12,28 +12,26 @@ describe('Client', () => {
   })
 
   describe('#login()', () => {
-    let request
+    beforeEach(done => {
+      jasmine.Ajax.stubRequest('https://hello.attendease.com/api/authenticate.json').andReturn({
+        status: 200,
+        responseText: '{"email":"hello@attendease.com","access_token":"a"}'
+      })
 
-    beforeEach(() => {
       client.login({
         email: 'hello@attendease.com',
         password: 'YbAd8TzopfRg'
-      })
-
-      request = jasmine.Ajax.requests.mostRecent()
-
-      request.respondWith({
-        status: '200',
-        responseText: '{"email":"hello@attendease.com","access_token":"a"}'
-      })
+      }).then(done, done)
     })
 
     it('POSTs to api/authenticate with credentials', () => {
+      const request = jasmine.Ajax.requests.mostRecent()
+
       expect(request.url).toBe('https://hello.attendease.com/api/authenticate.json')
       expect(request.method).toBe('POST')
       expect(request.data()).toEqual({
-        email: ['hello@attendease.com'],
-        password: ['YbAd8TzopfRg']
+        email: 'hello@attendease.com',
+        password: 'YbAd8TzopfRg'
       })
     })
 
@@ -44,20 +42,21 @@ describe('Client', () => {
   })
 
   describe('#logout()', () => {
-    beforeEach(() => {
-      client.login({
-        email: 'hello@attendease.com',
-        password: 'YbAd8TzopfRg'
-      })
-
-      const request = jasmine.Ajax.requests.mostRecent()
-
-      request.respondWith({
-        status: '200',
+    beforeEach(done => {
+      jasmine.Ajax.stubRequest('https://hello.attendease.com/api/authenticate.json').andReturn({
+        status: 200,
         responseText: '{"email":"hello@attendease.com","access_token":"a"}'
       })
 
-      client.logout()
+      const logout = function() {
+        client.logout()
+        done()
+      }
+
+      client.login({
+        email: 'hello@attendease.com',
+        password: 'YbAd8TzopfRg'
+      }).then(logout, logout)
     })
 
     it('Clears localstorage so user / credentials are no longer stored', () => {

@@ -1,13 +1,15 @@
+var when = require('when')
+
 // Fetches the resource from localStorage if there is existing data available in
 // localStorage, otherwise a server sync will happen. If sync is true, the
 // server sync will happen unconditionally.
 exports.fetch = function(resource, sync) {
-  var def = $.Deferred()
   var data
 
   if (!sync && (data = localStorage[resource])) {
-    def.resolve(JSON.parse(data))
-    return def.promise()
+    return when.promise(function(resolve) {
+      resolve(JSON.parse(data))
+    })
   } else {
     return this.sync(resource)
   }

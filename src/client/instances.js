@@ -1,18 +1,21 @@
+var when = require('when')
+
 // Fetches and returns all sessions (mapped as instances) for the event.
 exports.instances = function(sync) {
-  var def = $.Deferred()
-  var instances = []
+  var self = this
 
-  this.sessions(sync).then(function(sessions) {
-    sessions.forEach(function(session) {
-      (session.instances || []).forEach(function(instance) {
-        instance.session = session
-        instances.push(instance)
+  return when.promise(function(resolve, reject) {
+    var instances = []
+
+    self.sessions(sync).then(function(sessions) {
+      sessions.forEach(function(session) {
+        (session.instances || []).forEach(function(instance) {
+          instance.session = session
+          instances.push(instance)
+        })
       })
-    })
 
-    def.resolve(instances)
-  }, def.reject)
-
-  return def.promise()
+      resolve(instances)
+    }, reject)
+  })
 }

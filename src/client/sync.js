@@ -1,3 +1,6 @@
+var request = require('axios')
+var when = require('when')
+
 // Appends new items and updates existing items on the current localStorage
 // collection for the given resource and dataset.
 var mergeData = function(resource, data) {
@@ -73,44 +76,36 @@ var updateLastSync = function(resource, timestamp) {
 
 // Syncs the resource with Attendease event API and stores in localStorage.
 exports.sync = function(resource) {
-  var def = $.Deferred()
-  var data = this.credentials()
-  var timestamp = Math.floor(Date.now() / 1000)
-  var merged
+  var self = this
 
-  data.since = lastSync(resource)
-  data.meta = true
+  return when.promise(function(resolve, reject) {
+    var url = self.apiRoot() + 'api/' + resource + '.json'
+    var data = self.credentials()
+    var timestamp = Math.floor(Date.now() / 1000)
+    var merged
 
-  $.ajax({
-    type: "GET",
-    url: this.apiRoot() + 'api/' + resource + '.json',
-    data: data,
-    success: function(response) {
-      merged = mergeData(resource, response)
+    data.since = lastSync(resource)
+    data.meta = true
+
+    request.get(url, {params: data}).then(function(response) {
+      merged = mergeData(resource, response.data)
       updateLastSync(resource, timestamp)
-      def.resolve(merged)
-    },
-    error: def.reject
+      resolve(merged)
+    }, reject)
   })
-
-  return def.promise()
 }
 
 // Syncs the deleted resources with Attendease event API and updates the
 // collection in localStorage.
 exports.syncDeletions = function() {
+  var url = this.apiRoot() + 'api/deletions.json'
   var data = this.credentials()
   var timestamp = Math.floor(Date.now() / 1000)
 
   data.since = lastSync('deletions')
 
-  return $.ajax({
-    type: "GET",
-    url: this.apiRoot() + 'api/deletions.json',
-    data: data,
-    success: function(response) {
-      removeData(response)
-      updateLastSync('deletions', timestamp)
-    }
+  return request.get(url, {params: data}).then(function(response) {
+    removeData(response.data)
+    updateLastSync('deletions', timestamp)
   })
 }

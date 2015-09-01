@@ -1,3 +1,5 @@
+var request = require('axios')
+
 // Checks in the current user.
 exports.checkin = function(type, extra) {
   var data = this.credentials()
@@ -15,14 +17,10 @@ exports.checkin = function(type, extra) {
       data.beacon = extra
   }
 
-  return $.ajax({
-    type: "POST",
-    url: this.apiRoot() + 'api/checkin',
-    data: data
-  })
+  return request.post(this.apiRoot() + 'api/checkin', data)
 }
 
-// Undos a check-in for the current user.
+// Undo a check-in for the current user.
 exports.undoCheckin = function(type, extra) {
   var data = this.credentials()
 
@@ -36,9 +34,5 @@ exports.undoCheckin = function(type, extra) {
       break
   }
 
-  return $.ajax({
-    type: "POST",
-    url: this.apiRoot() + 'api/checkin_undo',
-    data: data
-  })
+  return request.post(this.apiRoot() + 'api/checkin_undo', data)
 }
