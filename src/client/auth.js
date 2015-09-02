@@ -35,8 +35,10 @@ exports.user = function(sync) {
   if (!this.performCaching || sync) {
     return this.sync('user_details')
   } else {
-    data = cache.user_details
-    return data ? JSON.parse(data) : false
+    return when.promise(function(resolve, reject) {
+      data = cache.user_details
+      resolve(data ? JSON.parse(data) : false)
+    })
   }
 }
 
