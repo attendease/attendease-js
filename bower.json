@@ -1,7 +1,7 @@
 {
   "name": "attendease",
   "main": "dist/attendease.js",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "homepage": "https://github.com/attendease/attendease",
   "description": "Official JavaScript/Node SDK for Attendease.",
   "keywords": [
