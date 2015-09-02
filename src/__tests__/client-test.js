@@ -3,7 +3,7 @@ import Client from '../client'
 jasmine.Ajax.install()
 
 describe('Client', () => {
-  const client = new Client('hello')
+  const client = new Client('hello', {performCaching: true})
 
   describe('#apiRoot()', () => {
     it('returns the API root using the event subdomain', () => {

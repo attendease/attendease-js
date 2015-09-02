@@ -7,9 +7,12 @@ exports.login = function(credentials) {
   this.logout()
 
   var url = this.apiRoot() + 'api/authenticate.json'
+  var performCaching = this.performCaching
 
   return request.post(url, credentials).then(function(response) {
-    cache.user_details = JSON.stringify(response.data)
+    if (performCaching) {
+      cache.user_details = JSON.stringify(response.data)
+    }
 
     cache.credentials = JSON.stringify({
       attendee_token: response.data.access_token
@@ -29,7 +32,7 @@ exports.logout = function() {
 exports.user = function(sync) {
   var data
 
-  if (sync) {
+  if (!this.performCaching || sync) {
     return this.sync('user_details')
   } else {
     data = cache.user_details

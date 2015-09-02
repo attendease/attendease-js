@@ -7,7 +7,7 @@ var cache = require('../cache')
 exports.fetch = function(resource, sync) {
   var data
 
-  if (!sync && (data = cache[resource])) {
+  if (!sync && this.performCaching && (data = cache[resource])) {
     return when.promise(function(resolve) {
       resolve(JSON.parse(data))
     })

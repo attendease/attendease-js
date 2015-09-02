@@ -85,28 +85,37 @@ exports.sync = function(resource) {
     var timestamp = Math.floor(Date.now() / 1000)
     var merged
 
-    data.since = lastSync(resource)
     data.meta = true
 
-    request.get(url, {params: data}).then(function(response) {
-      merged = mergeData(resource, response.data)
-      updateLastSync(resource, timestamp)
-      resolve(merged)
-    }, reject)
+    if (this.performCaching) {
+      data.since = lastSync(resource)
+
+      request.get(url, {params: data}).then(function(response) {
+        merged = mergeData(resource, response.data)
+        updateLastSync(resource, timestamp)
+        resolve(merged)
+      }, reject)
+    } else {
+      request.get(url, {params: data}).then(function(response) {
+        resolve(response.data)
+      }, reject)
+    }
   })
 }
 
 // Syncs the deleted resources with Attendease event API and updates the
 // collection in the cache.
 exports.syncDeletions = function() {
-  var url = this.apiRoot() + 'api/deletions.json'
-  var data = this.credentials()
-  var timestamp = Math.floor(Date.now() / 1000)
+  if (this.performCaching) {
+    var url = this.apiRoot() + 'api/deletions.json'
+    var data = this.credentials()
+    var timestamp = Math.floor(Date.now() / 1000)
 
-  data.since = lastSync('deletions')
+    data.since = lastSync('deletions')
 
-  return request.get(url, {params: data}).then(function(response) {
-    removeData(response.data)
-    updateLastSync('deletions', timestamp)
-  })
+    return request.get(url, {params: data}).then(function(response) {
+      removeData(response.data)
+      updateLastSync('deletions', timestamp)
+    })
+  }
 }

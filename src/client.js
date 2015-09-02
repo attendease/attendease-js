@@ -4,6 +4,7 @@ var util = require('./util')
 function Client(subdomain, options) {
   this.subdomain = subdomain
   this.endpoint = options && options.apiRoot
+  this.performCaching = options && options.performCaching
 }
 
 // Returns the Attendease event API endpoint.
