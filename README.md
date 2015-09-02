@@ -2,6 +2,11 @@
 
 Official JavaScript/Node SDK for [Attendease](https://attendease.com/).
 
+[![npm version](https://img.shields.io/npm/v/attendease.svg?style=flat-square)](https://www.npmjs.org/package/attendease)
+[![build status](https://img.shields.io/travis/attendease/attendease-js.svg?style=flat-square)](https://travis-ci.org/attendease/attendease-js)
+[![npm downloads](https://img.shields.io/npm/dm/attendease.svg?style=flat-square)](https://www.npmjs.org/package/attendease)
+[![dependency status](https://img.shields.io/david/attendease/attendease-js.svg?style=flat-square)](https://david-dm.org/attendease/attendease-js)
+
 ### Installation
 
 Install with [bower](http://bower.io/) or [npm](https://www.npmjs.org/) (recommended).
