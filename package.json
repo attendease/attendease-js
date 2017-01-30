@@ -1,7 +1,7 @@
 {
   "name": "attendease",
   "description": "Official JavaScript/Node SDK for Attendease.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "url": "http://github.com/attendease/attendease-js",
   "main": "src/attendease.js",
   "repository": {
@@ -26,7 +26,7 @@
   },
   "scripts": {
     "test": "karma start",
-    "build": "webpack src/attendease.js dist/attendease.js",
+    "build": "webpack src/attendease.js dist/attendease.js -p",
     "watch": "webpack src/attendease.js dist/attendease.js --watch"
   }
 }
